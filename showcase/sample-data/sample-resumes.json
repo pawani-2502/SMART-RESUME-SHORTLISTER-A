@@ -1,0 +1,69 @@
+{
+  "candidates": [
+    {
+      "id": "demo-cand-001",
+      "name": "Alex Johnson",
+      "email": "alex.johnson@email.com",
+      "location": "San Francisco, CA",
+      "summary": "Senior Full Stack Engineer with 7 years building scalable web applications. Expert in Python, React, AWS, and microservices.",
+      "skills": ["Python", "TypeScript", "React", "FastAPI", "PostgreSQL", "AWS", "Docker", "Kubernetes", "Redis", "CI/CD"],
+      "experience": [
+        { "title": "Senior Software Engineer", "company": "TechCorp Inc.", "start": "2021", "end": "Present", "technologies": ["Python", "FastAPI", "React", "AWS", "Docker"] },
+        { "title": "Software Engineer", "company": "StartupXYZ", "start": "2018", "end": "2020", "technologies": ["Python", "Django", "React", "PostgreSQL"] },
+        { "title": "Junior Developer", "company": "WebAgency", "start": "2016", "end": "2018", "technologies": ["JavaScript", "Python"] }
+      ],
+      "education": [{ "degree": "B.S. Computer Science", "institution": "UC Berkeley", "year": 2016 }],
+      "certifications": ["AWS Solutions Architect", "Kubernetes CKA"],
+      "projects": ["Customer API serving 2M+ daily requests", "Microservices migration (-60% deploy time)"],
+      "achievements": ["Mentored 4 junior engineers", "Led CI/CD pipeline reducing release cycle to daily"]
+    },
+    {
+      "id": "demo-cand-002",
+      "name": "Priya Sharma",
+      "email": "priya.sharma@email.com",
+      "location": "Austin, TX",
+      "summary": "Full Stack Developer with 5 years in React and Node.js. Strong frontend focus with growing backend expertise.",
+      "skills": ["JavaScript", "React", "Node.js", "PostgreSQL", "AWS", "GraphQL", "TypeScript"],
+      "experience": [
+        { "title": "Full Stack Developer", "company": "FinFlow", "start": "2020", "end": "Present", "technologies": ["React", "Node.js", "PostgreSQL"] },
+        { "title": "Frontend Developer", "company": "DesignHub", "start": "2018", "end": "2020", "technologies": ["React", "JavaScript"] }
+      ],
+      "education": [{ "degree": "B.Tech IT", "institution": "IIT Delhi", "year": 2018 }],
+      "certifications": [],
+      "projects": ["Real-time trading dashboard", "Component library adopted by 3 teams"],
+      "achievements": ["Reduced page load time by 40%"]
+    },
+    {
+      "id": "demo-cand-003",
+      "name": "Michael Chen",
+      "email": "michael.chen@email.com",
+      "location": "Seattle, WA",
+      "summary": "Backend-focused engineer with 6 years in Python and distributed systems. Limited frontend exposure.",
+      "skills": ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "AWS", "Kafka"],
+      "experience": [
+        { "title": "Backend Engineer", "company": "DataStream", "start": "2019", "end": "Present", "technologies": ["Python", "FastAPI", "Kafka", "PostgreSQL"] },
+        { "title": "Python Developer", "company": "CloudBase", "start": "2017", "end": "2019", "technologies": ["Python", "Django", "AWS"] }
+      ],
+      "education": [{ "degree": "M.S. Computer Science", "institution": "UW Seattle", "year": 2017 }],
+      "certifications": ["AWS Developer Associate"],
+      "projects": ["Event streaming platform processing 10M events/day"],
+      "achievements": ["Designed fault-tolerant ingestion pipeline"]
+    },
+    {
+      "id": "demo-cand-004",
+      "name": "Jordan Lee",
+      "email": "jordan.lee@email.com",
+      "location": "Portland, OR",
+      "tier": "weak",
+      "summary": "Junior developer with 2 years experience. Eager learner with limited production exposure.",
+      "skills": ["JavaScript", "HTML", "CSS", "Basic Python", "Git"],
+      "experience": [
+        { "title": "Junior Web Developer", "company": "LocalWeb Co.", "start": "2022", "end": "Present", "technologies": ["JavaScript", "HTML", "CSS"] }
+      ],
+      "education": [{ "degree": "B.S. Information Technology", "institution": "State University", "year": 2022 }],
+      "certifications": [],
+      "projects": ["Personal portfolio website", "Todo app with local storage"],
+      "achievements": ["Completed online bootcamp"]
+    }
+  ]
+}

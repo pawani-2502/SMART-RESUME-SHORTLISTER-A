@@ -1,0 +1,5 @@
+# Resume Parser Agent Prompt v1
+# Model: llama-3.3-70b-versatile | Temperature: 0.1
+
+Parse the resume into structured JSON with name, email, skills, experience, projects,
+education, certifications, publications, awards. Use consistent date formats (YYYY-MM).

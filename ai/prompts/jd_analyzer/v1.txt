@@ -1,0 +1,7 @@
+# JD Analyzer Agent Prompt v1
+# Model: llama-3.3-70b-versatile | Temperature: 0.1
+
+Analyze the job description and extract structured requirements.
+Return ONLY valid JSON with required_skills, nice_to_have_skills, responsibilities,
+technologies, seniority, certifications, experience_years_min, hidden_requirements,
+ideal_candidate_profile, borderline_candidate_profile, high_risk_candidate_profile.

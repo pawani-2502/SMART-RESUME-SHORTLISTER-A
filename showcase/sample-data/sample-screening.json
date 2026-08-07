@@ -1,0 +1,52 @@
+{
+  "tests": [
+    {
+      "id": "test-001",
+      "job_title": "Senior Full Stack Developer",
+      "candidate_name": "Alex Johnson",
+      "tier": "strong",
+      "status": "completed",
+      "test_score": 0.92,
+      "questions": [
+        { "question": "Design a REST API rate limiter for 10K RPS using Redis.", "type": "system_design" },
+        { "question": "Explain React Server Components and when to use them.", "type": "technical" },
+        { "question": "How would you debug a memory leak in a Python FastAPI service?", "type": "debugging" }
+      ],
+      "analytics": { "passed": true, "time_minutes": 28 }
+    },
+    {
+      "id": "test-002",
+      "job_title": "Senior Full Stack Developer",
+      "candidate_name": "Priya Sharma",
+      "tier": "medium",
+      "status": "completed",
+      "test_score": 0.71,
+      "questions": [
+        { "question": "Implement debounced search in React with TypeScript.", "type": "coding" },
+        { "question": "Compare SQL vs NoSQL for a fintech dashboard.", "type": "technical" },
+        { "question": "Describe your approach to frontend performance optimization.", "type": "behavioral" }
+      ],
+      "analytics": { "passed": true, "time_minutes": 35 }
+    },
+    {
+      "id": "test-003",
+      "job_title": "Senior Full Stack Developer",
+      "candidate_name": "Jordan Lee",
+      "tier": "weak",
+      "status": "completed",
+      "test_score": 0.48,
+      "questions": [
+        { "question": "What is the difference between REST and GraphQL?", "type": "technical" },
+        { "question": "Write a SQL query to find duplicate emails.", "type": "coding" },
+        { "question": "Explain CI/CD basics.", "type": "fundamentals" }
+      ],
+      "analytics": { "passed": false, "time_minutes": 42 }
+    }
+  ],
+  "summary": {
+    "total_tests": 12,
+    "completed": 9,
+    "passed": 6,
+    "avg_score": 0.74
+  }
+}

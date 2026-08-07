@@ -1,0 +1,22 @@
+{
+  "candidate_id": "demo-cand-001",
+  "candidate_name": "Alex Johnson",
+  "readiness_score": 0.89,
+  "communication_score": 0.85,
+  "confidence_score": 0.87,
+  "transcript": [
+    { "role": "interviewer", "text": "Tell me about your experience building APIs at scale." },
+    { "role": "candidate", "text": "At TechCorp I led a FastAPI service handling 2M+ daily requests. We used PostgreSQL with connection pooling and Redis caching for hot paths.", "evidence": "Led development of customer-facing API serving 2M+ daily requests" },
+    { "role": "interviewer", "text": "How did you approach the microservices migration?" },
+    { "role": "candidate", "text": "We decomposed a monolith into 6 services with Docker on AWS ECS. Deployment time dropped 60% with independent release cycles.", "evidence": "Architected microservices migration reducing deployment time by 60%" },
+    { "role": "interviewer", "text": "Describe your mentorship approach." },
+    { "role": "candidate", "text": "I mentored 4 junior engineers with weekly code reviews and paired architecture sessions. Two were promoted within 18 months.", "evidence": "Mentored team of 4 junior engineers" }
+  ],
+  "strengths": ["Deep FastAPI production experience", "Clear evidence-backed answers", "Leadership and mentorship track record"],
+  "weaknesses": ["Limited discussion of Kubernetes in production"],
+  "follow_up_questions": [
+    "Walk through your Kubernetes deployment strategy at TechCorp",
+    "How would you design the API for our specific job requirements?",
+    "Describe a conflict resolution scenario with cross-functional teams"
+  ]
+}

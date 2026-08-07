@@ -1,0 +1,14 @@
+/* Aligned with frontend/src/app/globals.css + landing page */
+.showcase-shell {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, rgb(248 250 252), rgb(255 255 255));
+  color: hsl(var(--foreground));
+}
+
+.showcase-shell .text-muted {
+  color: hsl(var(--muted-foreground));
+}
+
+@media print {
+  .showcase-no-print { display: none !important; }
+}

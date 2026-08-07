@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: shortlister-api
+    env: docker
+    dockerfilePath: ./docker/Dockerfile.backend
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: shortlister-db
+          property: connectionString
+      - key: API_SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: shortlister-db
+    plan: starter

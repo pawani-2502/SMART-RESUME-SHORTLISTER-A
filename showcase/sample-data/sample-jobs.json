@@ -1,0 +1,76 @@
+{
+  "jobs": [
+    {
+      "id": "demo-job-001",
+      "title": "Senior Full Stack Developer",
+      "company": "NovaTech Labs",
+      "status": "active",
+      "description": "Build scalable web applications with Python, React, and AWS. Mentor engineers and own features end-to-end.",
+      "parsed_data": {
+        "seniority": "senior",
+        "experience_years_min": 5,
+        "required_skills": [
+          { "name": "Python", "importance": "must_have" },
+          { "name": "React", "importance": "must_have" },
+          { "name": "TypeScript", "importance": "must_have" },
+          { "name": "PostgreSQL", "importance": "must_have" },
+          { "name": "AWS", "importance": "must_have" }
+        ]
+      }
+    },
+    {
+      "id": "demo-job-002",
+      "title": "AI Engineer",
+      "company": "Cortex AI",
+      "status": "active",
+      "description": "Design and deploy ML pipelines, LLM integrations, and production AI systems at scale.",
+      "parsed_data": {
+        "seniority": "senior",
+        "experience_years_min": 4,
+        "required_skills": [
+          { "name": "Python", "importance": "must_have" },
+          { "name": "PyTorch", "importance": "must_have" },
+          { "name": "LLMs", "importance": "must_have" },
+          { "name": "MLOps", "importance": "must_have" },
+          { "name": "Vector Databases", "importance": "nice_to_have" }
+        ]
+      }
+    },
+    {
+      "id": "demo-job-003",
+      "title": "Data Scientist",
+      "company": "Insight Analytics",
+      "status": "active",
+      "description": "Drive data-driven decisions with statistical modeling, experimentation, and ML deployment.",
+      "parsed_data": {
+        "seniority": "mid",
+        "experience_years_min": 3,
+        "required_skills": [
+          { "name": "Python", "importance": "must_have" },
+          { "name": "SQL", "importance": "must_have" },
+          { "name": "Statistics", "importance": "must_have" },
+          { "name": "Scikit-learn", "importance": "must_have" },
+          { "name": "Tableau", "importance": "nice_to_have" }
+        ]
+      }
+    },
+    {
+      "id": "demo-job-004",
+      "title": "Backend Engineer",
+      "company": "Streamline Systems",
+      "status": "active",
+      "description": "Architect high-throughput APIs, distributed systems, and data pipelines for enterprise clients.",
+      "parsed_data": {
+        "seniority": "senior",
+        "experience_years_min": 5,
+        "required_skills": [
+          { "name": "Python", "importance": "must_have" },
+          { "name": "FastAPI", "importance": "must_have" },
+          { "name": "PostgreSQL", "importance": "must_have" },
+          { "name": "Redis", "importance": "must_have" },
+          { "name": "Kafka", "importance": "must_have" }
+        ]
+      }
+    }
+  ]
+}

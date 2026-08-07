@@ -1,0 +1,42 @@
+# Resume-Centric Smart Shortlister - Sample Job Description
+
+## Senior Full Stack Engineer
+
+### About the Role
+We are seeking a Senior Full Stack Engineer to join our growing engineering team. You will design and build scalable web applications, mentor junior developers, and collaborate with product and design teams in a fast-paced startup environment.
+
+### Responsibilities
+- Design and implement RESTful APIs using Python/FastAPI
+- Build responsive frontend applications with React and TypeScript
+- Architect microservices on AWS using Docker and Kubernetes
+- Lead code reviews and mentor junior engineers
+- Collaborate with cross-functional stakeholders on product requirements
+- Own features end-to-end from design to deployment
+
+### Required Qualifications
+- 5+ years of software engineering experience
+- Strong proficiency in Python and JavaScript/TypeScript
+- Experience with React, Node.js, or similar frontend frameworks
+- Experience with PostgreSQL and database design
+- AWS cloud infrastructure experience
+- Docker containerization experience
+- Bachelor's degree in Computer Science or equivalent
+
+### Preferred Qualifications
+- Kubernetes orchestration experience
+- Machine learning or AI integration experience
+- FastAPI or Django experience
+- CI/CD pipeline setup experience
+- Open source contributions
+
+### Nice to Have
+- GraphQL API experience
+- Redis caching experience
+- Terraform infrastructure as code
+- Experience in fintech or healthcare domains
+
+### What We Offer
+- Competitive salary ($140,000 - $180,000)
+- Remote-friendly with optional SF office
+- Health, dental, vision insurance
+- Professional development budget

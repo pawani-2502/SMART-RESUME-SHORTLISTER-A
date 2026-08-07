@@ -1,0 +1,46 @@
+ALEX JOHNSON
+Senior Software Engineer
+alex.johnson@email.com | +1 (555) 123-4567 | San Francisco, CA
+linkedin.com/in/alexjohnson
+
+SUMMARY
+Senior Full Stack Engineer with 7 years of experience building scalable web applications.
+Expert in Python, React, AWS, and microservices architecture. Proven track record of
+leading teams and delivering high-impact products.
+
+SKILLS
+Python, JavaScript, TypeScript, React, Node.js, FastAPI, PostgreSQL, AWS, Docker,
+Kubernetes, Redis, Git, Agile, REST APIs, Microservices, CI/CD
+
+EXPERIENCE
+
+Senior Software Engineer | TechCorp Inc. | San Francisco, CA
+January 2021 - Present
+- Led development of customer-facing API serving 2M+ daily requests using FastAPI and PostgreSQL
+- Architected microservices migration reducing deployment time by 60%
+- Mentored team of 4 junior engineers, conducting weekly code reviews
+- Technologies: Python, FastAPI, React, AWS, Docker, Kubernetes
+
+Software Engineer | StartupXYZ | San Francisco, CA
+June 2018 - December 2020
+- Built React dashboard used by 50,000+ users with real-time data visualization
+- Implemented CI/CD pipeline using GitHub Actions, reducing release cycle from weekly to daily
+- Designed RESTful APIs handling 500K requests/day
+- Technologies: Python, Django, React, PostgreSQL, AWS
+
+Junior Developer | WebAgency | Oakland, CA
+July 2016 - May 2018
+- Developed client websites and web applications using JavaScript and Python
+- Technologies: JavaScript, Python, HTML, CSS, MySQL
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of California, Berkeley | 2016
+
+CERTIFICATIONS
+AWS Solutions Architect Associate | 2022
+Kubernetes Administrator (CKA) | 2023
+
+PROJECTS
+Open Source ML Pipeline - Built Python library for data preprocessing with 500+ GitHub stars
+E-commerce Platform - Full-stack React/Node.js application with payment integration

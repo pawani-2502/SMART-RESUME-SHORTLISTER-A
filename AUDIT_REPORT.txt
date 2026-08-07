@@ -1,0 +1,821 @@
+================================================================================
+RESUME-CENTRIC SMART SHORTLISTER — COMPLETE END-TO-END AUDIT REPORT
+================================================================================
+Audit Date: June 23, 2026
+Methodology: Code-verified only. README, comments, and marketing copy not trusted.
+Auditor Role: Principal Architect / Staff AI / QA / Security / DevOps / Reviewer
+
+================================================================================
+1. EXECUTIVE SUMMARY
+================================================================================
+
+This project is a FUNCTIONAL MVP-STYLE recruiting platform with a real FastAPI
+backend, Next.js 15 frontend, PostgreSQL persistence, Redis/Celery async jobs,
+and a detachable showcase/demo layer. It is NOT production-ready as shipped.
+
+WHAT ACTUALLY EXISTS:
+- ~57 REST API endpoints under /api/v1
+- 24 Next.js App Router pages (22 production + 2 showcase wrappers)
+- 22 AI engine modules in ai/engines/ orchestrated by ai/pipeline/ranking_pipeline.py
+- 17 SQLAlchemy models, schema also defined in database/init.sql
+- 5 Celery tasks (4 wired to API, 1 dead)
+- JWT auth, NextAuth, optional Google OAuth
+- Detachable showcase at /demo and /about with zero backend calls
+
+WHAT IS MISLEADING:
+- Marketing claims "24–32 AI modules" — most are heuristic/rule-based, not deep ML
+- LangChain, LangGraph, FAISS listed in requirements but NEVER imported
+- "Shadow Interview" is template Q&A + resume grep, not multi-agent LLM
+- "Knowledge Graph" is a deterministic node/edge builder, not a graph DB
+- "Skill Verification" hardcoded to 0.5 during ranking — screening scores never flow back
+- RBAC and rate limiting exist in code but are largely unenforced on core routes
+
+BRUTAL VERDICT:
+- Portfolio / local dev / examiner demo: READY
+- Production deployment (Docker full stack, multi-tenant, secure): NOT READY
+- Estimated true feature completion: ~55–60% (not the ~90% README implies)
+
+================================================================================
+2. FEATURE COMPLETION TABLE (32 CORE FEATURES)
+================================================================================
+
+Status key: [W] Working  [P] Partial  [M] Missing  [B] Broken  [D] Dead/Demo-only
+
+ #  Feature                      Status  Evidence / Notes
+--- --------------------------- ------  ------------------------------------------
+ 1  JD Intelligence              [P]     llm_service.parse_job_description() + fallback
+                                         heuristics. Prompt files in ai/prompts/ unused.
+ 2  Resume Intelligence          [P]     llm_service.parse_resume() + post-parse metrics.
+                                         LLM optional; rule fallback always available.
+ 3  Career Trajectory            [W]     ai/engines/career_trajectory.py — title-based
+                                         seniority, promotion velocity. Unit tested.
+ 4  Temporal Skill Decay         [W]     ai/engines/skill_decay.py — exponential decay.
+                                         Wired in ranking_pipeline.py. Unit tested.
+ 5  Latent Skill Graph           [P]     ai/engines/skill_graph.py — static ontology
+                                         (~40 skills), NOT learned graph.
+ 6  Hybrid Retrieval             [P]     ai/engines/retrieval.py — BM25 + embeddings.
+                                         NO FAISS. hybrid_retrieval.py is dead duplicate.
+ 7  Cross Encoder Reranking      [P]     Used inside retrieval.rerank() if model loads;
+                                         cross_encoder.py is orphaned duplicate module.
+ 8  Recruiter Overrides          [W]     DB model + CRUD at /jobs/{id}/override.
+                                         Frontend settings page has init BUG (see §4).
+ 9  Eligibility Gate             [W]     ai/engines/eligibility.py — knockouts wired.
+10  Credibility Detection        [W]     ai/engines/credibility.py — rule-based.
+                                         Unit tested.
+11  Screening Tests              [P]     API + templates in screening.py. Grading =
+                                         word-count heuristic, not LLM. Duplicate routes
+                                         in rankings.py and screening.py.
+12  Skill Verification           [B]     verification_score HARDCODED 0.5 in
+                                         ranking_pipeline.py:88. Screening scores stored
+                                         on ScreeningTest but never update Ranking.
+13  Interview Packs              [W]     Template-based generation + PDF export.
+                                         Async Celery task exists; UI uses sync path.
+14  Shadow Interview             [P]     ai/engines/shadow_interview.py — canned questions
+                                         + resume snippet matching. NOT LLM multi-agent.
+                                         shadow_interview_graph.py unused. Frontend flow broken.
+15  Evidence Grounding           [W]     ai/engines/evidence.py — keyword search in
+                                         experience/projects/certs. Stored on Ranking.
+16  Confidence Engine            [W]     ai/engines/confidence.py — weighted formula.
+                                         Unit tested.
+17  Human Review                 [W]     assess_human_review() in confidence.py.
+                                         Rule-based flags. Unit tested.
+18  Bias Audit                   [W]     ai/engines/bias_audit.py — blind re-score.
+                                         Simple threshold flag. Displayed on candidate page.
+19  Candidate Comparison         [W]     ai/engines/comparison.py + POST /jobs/{id}/compare.
+20  Analytics Dashboard          [P]     SQL aggregates in analytics.py. AnalyticsEvent
+                                         table barely used (only job_created logged).
+21  Export System                [P]     Sync export works (CSV/Excel/JSON/PDF).
+                                         Celery export_shortlist_task defined but UNWIRED.
+22  Batch Processing             [P]     Celery batch parsing works. No dedup/knowledge
+                                         graph in batch path (unlike single upload).
+23  Ranking History              [W]     RankingRun snapshots + compare endpoints.
+                                         Frontend page well-built.
+24  Progress Tracking            [W]     Redis + SSE in progress.py. ProgressTracker
+                                         component used on key pages. TaskProgress DB
+                                         model exists but is UNUSED (Redis-only).
+25  Recruiter Copilot            [P]     copilot_agent.py — regex intent + LLM answer
+                                         with structured context. NOT embedding RAG.
+26  Knowledge Graph              [P]     build_knowledge_graph() from parsed_data.
+                                         KnowledgeNode DB rows written on upload but
+                                         read endpoint rebuilds from parsed_data, not DB.
+                                         Frontend renders tags, not a graph viz.
+27  Hiring Recommendation Engine [W]     ai/engines/recommendation.py — if/else thresholds.
+28  Candidate Improvement Engine [W]     ai/engines/candidate_improvement.py — template
+                                         suggestions from gaps/weaknesses.
+29  JD Quality Analyzer          [W]     ai/engines/jd_quality.py — heuristic only, no LLM.
+                                         Best frontend error handling on this page.
+30  Resume Duplication Detection [P]     dedup_service.py — SHA256 + fuzzy match.
+                                         Only on single upload, NOT batch upload.
+31  Multi-Job Fit                [W]     ai/engines/multi_job_fit.py — skill coverage
+                                         across user's jobs.
+32  Feedback Learning            [P]     feedback_learning.py — weight nudges from
+                                         hired/rejected. Needs >=5 records; no ML training.
+
+SUMMARY COUNTS (verified from code):
+  Working (end-to-end usable):     14
+  Partial (implemented but weak):  15
+  Broken:                           1  (Skill Verification in ranking loop)
+  Missing:                          0  (all have some code, but many are stubs)
+  Dead/Demo-only:                   2  (showcase features mirror prod with static data)
+
+================================================================================
+3. FRONTEND AUDIT
+================================================================================
+
+STACK: Next.js 15, React 19, TanStack Query, NextAuth v4, Tailwind, Recharts
+
+PAGE INVENTORY (24 routes):
+  PUBLIC:
+    /                    Landing (frontend/src/app/page.tsx)
+    /login               Auth
+    /demo                Showcase wrapper → @showcase/demo
+    /about               Showcase wrapper → @showcase/about
+
+  PROTECTED (middleware.ts matcher):
+    /dashboard           Analytics overview
+    /jobs                Job list
+    /jobs/new            Create job (text or file JD)
+    /jobs/[id]           Job detail, candidates, rank, batch upload
+    /jobs/[id]/settings  Recruiter overrides — FORM INIT BUG
+    /jobs/[id]/screening Screening tests — well-built
+    /jobs/[id]/jd-quality JD quality — best error UX
+    /jobs/[id]/ranking-history Ranking history — well-built
+    /jobs/[id]/candidates/[cid]/interview-pack Interview pack
+    /candidates/[id]     Candidate detail (NO /candidates list route)
+    /candidates/[id]/improvements
+    /candidates/[id]/multi-job-fit
+    /rankings            Rankings (?job= query param)
+    /comparison          Candidate comparison
+    /interview           Interview sim (?job=&candidate= required)
+    /copilot             AI copilot (?job= query param)
+    /analytics           Analytics (duplicates dashboard data)
+    /audit               Audit logs (read-only, no filters)
+    /settings            STUB — localStorage only, no API
+    /tests/[id]/take     Take screening test
+
+COMPONENTS (12 in frontend/src/components):
+  Layout: AppShell, Sidebar, Providers
+  Feature: ProgressTracker
+  UI: Button, Card, Input, Textarea, Progress, LoadingState, ErrorState, EmptyState
+
+PAGE-BY-PAGE STATUS:
+  Page                  Routes  Data Loads  Loading  Error  Responsive  A11y  Verdict
+  --------------------  ------  ----------  -------  -----  ----------  ----  -------
+  Dashboard             OK      Partial     NO       NO     Basic       Poor  Silent zeros on load
+  Jobs                  OK      OK          Inline   NO     Basic       Poor  Functional
+  Job Detail            OK      OK          Partial  NO     Basic       Poor  Best async UX
+  Candidates (detail)   OK      OK          NO       NO     Basic       Poor  Interview btn broken
+  Rankings              OK      OK          NO       NO     Basic       Poor  Export no error UX
+  Comparison            OK      OK          NO       NO     Basic       Poor  Auto-runs compare
+  Analytics             OK      OK          NO       NO     Basic       Poor  ~duplicate of dashboard
+  Copilot               OK      OK          NO       NO     Basic       Poor  No streaming/errors
+  Interview Simulation  OK      Conditional Inline   NO     Basic       Poor  Orphaned from candidate
+  Screening Tests       OK      OK          YES      Partial Basic       Poor  One of best pages
+  JD Quality            OK      OK          YES      YES    Basic       Poor  Only page with ErrorState
+  Improvements          OK      OK          YES      Partial Basic       Poor  Clean
+  Multi-Job Fit         OK      OK          YES      NO     Basic       Poor  Empty fits = blank UI
+  Ranking History       OK      OK          YES      YES    Basic       Poor  Well-structured
+  Audit Logs            OK      OK          NO       NO     Basic       Poor  No pagination/filters
+  Settings              OK      NO API      NO       NO     Basic       Poor  Stub only
+  Job Settings          OK      OK          NO       NO     Basic       Poor  BROKEN form init
+  Demo                  OK      Static JSON YES      NO     Good        Fair  Isolated showcase
+  About                 OK      Static      YES      NO     Good        Fair  Portfolio page
+  Login                 OK      OK          YES      YES    Basic       Poor  Hardcoded dev creds
+
+CRITICAL FRONTEND BUGS:
+  1. jobs/[id]/settings/page.tsx lines 36-39: useState(() => {...}) misused instead
+     of useEffect — override data NEVER populates form fields.
+  2. candidates/[id]/page.tsx: Shadow Interview button POSTs API but does NOT
+     navigate to /interview or display results.
+  3. Dual auth: NextAuth session vs localStorage.token. Register bypasses NextAuth,
+     writes token to localStorage, may skip middleware session check.
+  4. login/page.tsx lines 15-16: Pre-filled admin@shortlister.ai / admin123.
+  5. No loading.tsx, error.tsx, not-found.tsx, or global-error.tsx in app router.
+  6. Radix UI packages in package.json largely unused — hand-rolled Tailwind UI.
+  7. Knowledge graph tab shows colored tags, not an actual graph visualization.
+
+================================================================================
+4. BACKEND AUDIT
+================================================================================
+
+STRUCTURE:
+  backend/          33 Python files — API orchestration, persistence, auth, Celery
+  ai/               22 engine modules + 2 agents + 1 pipeline + 4 unused prompt files
+  database/         init.sql + migrations/002_product_polish.sql
+  tests/            4 test files (backend only)
+  showcase/         32 source files — isolated demo layer
+  docker/           docker-compose.yml + 2 Dockerfiles
+  deployment/       vercel.json, render.yaml, railway.toml (minimal stubs)
+
+SERVICES (13):
+  auth_service.py, ranking_service.py, batch_service.py, llm_service.py,
+  document_parser.py, dedup_service.py, export_service.py, export_task_service.py,
+  screening_service.py, interview_pack_service.py, progress_service.py,
+  file_security.py, audit_service.py
+
+CELERY TASKS (5):
+  parse_resume_batch          WIRED — POST /candidates/job/{id}/batch
+  run_ranking_task            WIRED — POST /jobs/{id}/rank (async default)
+  generate_interview_pack_task WIRED — interview-packs generate
+  generate_screening_test_task WIRED — screening generate
+  export_shortlist_task       DEAD — defined, never called from any API route
+
+LLM PROVIDERS (backend/services/llm_service.py):
+  Gemini   — Real HTTP API with retry
+  Groq     — Real HTTP API with retry
+  Ollama   — Real local HTTP
+  Fallback — Rule-based keyword heuristics when all providers fail
+
+================================================================================
+5. API AUDIT (~57 ENDPOINTS)
+================================================================================
+
+BASE: /api/v1  |  Docs: /docs, /redoc  |  Health: /health, /ready
+
+AUTH (/api/v1/auth):
+  POST /google          Exists  Validation: yes  Auth: public  RBAC: n/a
+  POST /register        Exists  Validation: yes  Auth: public  RBAC: n/a
+  POST /login           Exists  Validation: yes  Auth: public  RBAC: n/a
+  GET  /me              Exists  Validation: yes  Auth: Bearer  RBAC: none
+
+JOBS (/api/v1/jobs):
+  GET    ""             Exists  Auth: Bearer  Ownership: user_id filter
+  POST   ""             Exists  Auth: Bearer  Ownership: yes
+  POST   /upload        Exists  Auth: Bearer  Ownership: yes
+  GET    /{id}          Exists  Auth: Bearer  Ownership: yes
+  PATCH  /{id}          Exists  Auth: Bearer  Ownership: yes
+  DELETE /{id}          Exists  Auth: Bearer  Ownership: yes
+  GET    /{id}/override Exists  Auth: Bearer  Ownership: partial
+  PUT    /{id}/override Exists  Auth: Bearer  Ownership: partial
+
+CANDIDATES (/api/v1/candidates):
+  GET  /job/{job_id}           Exists  Auth: Bearer  Ownership: NO — any authed user
+  POST /job/{job_id}/upload    Exists  Auth: Bearer  Ownership: yes (job check)
+  POST /job/{job_id}/batch     Exists  Auth: Bearer  Ownership: yes
+  GET  /batch/{batch_id}       Exists  Auth: Bearer  Ownership: yes
+  GET  /{id}                   Exists  Auth: Bearer  Ownership: NO — IDOR risk
+  DELETE /{id}                 Exists  Auth: Bearer  Ownership: NO — IDOR risk
+
+RANKINGS (/api/v1):
+  POST /jobs/{id}/rank                              Exists  Ownership: yes
+  GET  /jobs/{id}/rankings                          Exists  Ownership: partial
+  POST /jobs/{id}/compare                           Exists  Ownership: yes
+  POST /jobs/{id}/candidates/{cid}/interview        Exists  Ownership: partial
+  POST /jobs/{id}/candidates/{cid}/test             Exists  DUPLICATE of screening
+  POST /tests/{id}/submit                           Exists  DUPLICATE of screening
+  POST /jobs/{id}/candidates/{cid}/interview-pack   Exists  DUPLICATE of interview-packs
+  GET  /rankings/{id}/evidence                      Exists  Ownership: NO
+  POST /jobs/{id}/export                            Exists  Sync only
+
+ADVANCED (/api/v1):
+  POST /jobs/{id}/copilot/chat                      Exists  Ownership: yes
+  GET  /jobs/{id}/copilot/history                   Exists  Ownership: yes
+  POST /jobs/{id}/analyze-quality                   Exists  Ownership: yes
+  GET  /candidates/{id}/knowledge-graph             Exists  Ownership: NO
+  GET  /candidates/{id}/improvements                Exists  Ownership: NO
+  GET  /candidates/{id}/recommendation              Exists  Ownership: NO
+  GET  /candidates/{id}/multi-job-fit               Exists  Ownership: NO
+  GET  /jobs/{id}/feedback/weight-suggestions       Exists  Ownership: partial
+
+SCREENING (/api/v1/screening):  8 endpoints — RBAC enforced (require_permission)
+INTERVIEW-PACKS (/api/v1/interview-packs):  5 endpoints — RBAC enforced
+RANKING-HISTORY (/api/v1/ranking-history):  3 endpoints — RBAC enforced
+AUDIT (/api/v1/audit):  3 endpoints — RBAC on read
+ANALYTICS (/api/v1/analytics):  1 endpoint — auth only
+PROGRESS (/api/v1/progress):  2 endpoints — SSE accepts token via query param
+FILES (/api/v1/files):  2 endpoints — signed URL download
+
+API COVERAGE SUMMARY:
+  Total endpoints:           ~57
+  Auth required:             ~53 (public: /, /health, /ready, auth routes)
+  RBAC enforced:             ~20 (~37% of protected routes)
+  Ownership validated:       ~25 (~47% of protected routes)
+  Per-route rate limits:     0 (global slowapi default only, not applied per-route)
+  Request validation:        Pydantic schemas on most POST/PUT bodies
+  Error handling:            Global 500 catch in main.py middleware
+  Duplicate routes:          screening + rankings overlap (test generate/submit)
+
+================================================================================
+6. DATABASE AUDIT
+================================================================================
+
+TABLES (17 SQLAlchemy models in backend/models.py):
+  users, jobs, recruiter_overrides, candidates, rankings,
+  interview_simulations, screening_tests, interview_packs, batch_jobs,
+  analytics_events, ranking_runs, audit_logs, feedback, copilot_messages,
+  knowledge_nodes, resume_checksums, task_progress
+
+SCHEMA SOURCES:
+  - database/init.sql (primary DDL)
+  - database/migrations/002_product_polish.sql (supplemental)
+  - Runtime: Base.metadata.create_all() in main.py lifespan
+
+MIGRATIONS: MISSING
+  - alembic in requirements.txt but NO alembic/ folder, NO alembic.ini
+  - Schema created via create_all at startup only
+  - Risk: schema drift between init.sql and models.py undetected
+
+UNUSED / ORPHANED TABLES:
+  - task_progress: model exists, progress is Redis-only
+  - knowledge_nodes: written on upload, never read (endpoint rebuilds from JSONB)
+  - analytics_events: only job_created event logged
+
+FOREIGN KEYS (verified in models):
+  jobs.user_id → users.id (CASCADE)
+  candidates.job_id → jobs.id (CASCADE)
+  rankings.job_id → jobs.id, rankings.candidate_id → candidates.id
+  recruiter_overrides.job_id → jobs.id (UNIQUE)
+  screening_tests, interview_packs, ranking_runs → jobs/candidates
+  feedback, copilot_messages, audit_logs → users/jobs
+
+INDEXES: pg_trgm extension enabled in init.sql. No explicit index audit beyond FKs.
+
+ER SUMMARY (simplified):
+  User 1──* Job 1──* Candidate 1──1 Ranking
+              │              │
+              ├──1 RecruiterOverride
+              ├──* RankingRun
+              ├──* ScreeningTest
+              ├──* InterviewPack
+              ├──* BatchJob
+              └──* CopilotMessage
+  User 1──* AuditLog, Feedback
+
+================================================================================
+7. SECURITY AUDIT
+================================================================================
+
+AUTHENTICATION:
+  [W] JWT (HS256, 24h) via python-jose
+  [W] bcrypt password hashing via passlib
+  [P] Google OAuth via google-auth (returns 501 if google_client_id not set)
+  [W] NextAuth JWT strategy on frontend
+  [B] Split-brain auth: localStorage.token vs NextAuth session
+  [B] Register flow bypasses NextAuth middleware consistency
+
+AUTHORIZATION / RBAC:
+  [P] Roles defined: admin, recruiter, hiring_manager, viewer
+  [P] require_permission() only on: audit, screening, interview-packs, ranking-history
+  [B] Core routes (jobs, candidates, rankings, advanced) use get_current_user ONLY
+  [B] IDOR: any authenticated user can read/delete any candidate by UUID
+  [B] No frontend role-based UI restrictions
+
+RATE LIMITING:
+  [P] slowapi Limiter configured with default 100/min in main.py
+  [B] NO @limiter.limit decorators on any route
+  [B] rate_limit_rank_per_hour in config.py is UNUSED
+
+FILE UPLOAD SECURITY:
+  [W] Extension whitelist (.pdf, .docx, .doc, .txt)
+  [W] Size limit validation
+  [W] Empty file check
+  [P] Optional Fernet encryption (only if FILE_ENCRYPTION_KEY set)
+  [W] HMAC-SHA256 signed download URLs
+  [B] Virus scan: scan_file_hook() returns stub {"engine": "stub", "clean": True}
+
+SECRETS:
+  [B] Default api_secret_key = "dev-secret-key-change-in-production" in config.py
+  [B] Hardcoded dev credentials on login page
+  [P] .env.example has placeholders; .env present locally (gitignored)
+
+OTHER:
+  [W] CORS configurable via settings
+  [P] Sentry optional (if sentry_dsn set)
+  [P] Structured logging optional (structlog)
+  [B] Audit log ip_address field exists but callers never pass IP
+  [P] Progress SSE accepts JWT via query string (necessary for EventSource)
+
+VULNERABILITY SUMMARY:
+  CRITICAL: IDOR on candidate endpoints, default JWT secret
+  HIGH:     RBAC not enforced on core routes, auth split-brain
+  MEDIUM:   No per-route rate limits, stub virus scan, hardcoded login creds
+  LOW:      Missing IP in audit logs, unused encryption by default
+
+================================================================================
+8. AI AUDIT
+================================================================================
+
+Technology          Status              Where / Evidence
+------------------  ------------------  ------------------------------------------
+Gemini              USED                llm_service.py HTTP calls
+Groq                USED                llm_service.py HTTP calls
+Ollama              USED                llm_service.py local HTTP
+LangChain           INSTALLED, UNUSED   requirements.txt — zero imports in codebase
+LangGraph           INSTALLED, UNUSED   requirements.txt — zero imports
+                                      shadow_interview_graph.py is manual for-loop
+Sentence Transformers USED (optional)   retrieval.py — hash fallback if import fails
+Cross Encoder       PARTIALLY USED      retrieval.rerank() only; cross_encoder.py dead
+FAISS               INSTALLED, UNUSED   requirements.txt — zero imports
+                                      hybrid_retrieval.py has _faiss_indices never used
+rank-bm25           USED                retrieval.py BM25Okapi
+scikit-learn        INSTALLED, MINIMAL  No direct sklearn imports found in ai/
+numpy               USED                retrieval.py embeddings
+pandas              USED                export_service.py
+Rule-based fallback USED                llm_service.py when LLM providers fail
+
+DEAD AI MODULES:
+  ai/engines/hybrid_retrieval.py     — superseded by retrieval.py, never imported
+  ai/engines/cross_encoder.py        — duplicate of retrieval.py cross-encoder logic
+  ai/agents/shadow_interview_graph.py — never imported by API
+  ai/prompts/*/v1.txt (4 files)      — inline prompts in llm_service.py instead
+
+AI REALITY CHECK:
+  Parsing (JD/Resume):     Real LLM when API keys configured; heuristic fallback always
+  Ranking engines:         Mostly deterministic formulas and static ontologies
+  Shadow Interview:        Template Q&A + resume keyword grep, NOT conversational AI
+  Screening grading:       Word-count heuristic, NOT semantic evaluation
+  Copilot:                 Regex intent classification + LLM with structured context dump
+  Skill graph:             Static ~40-skill ontology, NOT learned embeddings graph
+  Feedback learning:       Simple weight nudges after 5+ feedback records, NOT ML training
+
+================================================================================
+9. INFRASTRUCTURE AUDIT
+================================================================================
+
+DOCKER (docker/docker-compose.yml):
+  Services: postgres:16, redis:7, backend, celery-worker, frontend
+  [W] Postgres healthcheck + init.sql mount
+  [W] Redis healthcheck
+  [B] Frontend Dockerfile does NOT copy showcase/ — build WILL FAIL
+      (frontend imports @showcase/* via tsconfig path alias)
+  [B] No DB seeding in compose (manual: python scripts/seed_demo.py)
+  [B] No healthchecks on backend, celery, frontend
+  [B] NEXT_PUBLIC_API_URL=http://localhost:8000 — wrong for container-to-container
+  [P] Backend image installs heavy ML deps (sentence-transformers, faiss-cpu unused)
+
+DEPLOYMENT STUBS:
+  deployment/vercel.json    — builds frontend/ only
+  deployment/render.yaml    — minimal, no worker service
+  deployment/railway.toml   — minimal
+
+OBSERVABILITY:
+  [P] /health — basic status
+  [P] /ready — Redis ping only (no DB check)
+  [P] Sentry integration optional
+  [P] structlog optional
+  [B] No metrics/prometheus
+  [B] No centralized logging in compose
+  [B] No CI/CD (.github/workflows missing)
+
+BACKGROUND PROCESSING:
+  [W] Redis broker + result backend for Celery
+  [W] Progress updates via Redis pub/sub + SSE
+  [W] Retries configured on Celery tasks (max_retries=2)
+  [P] 4/5 tasks wired; export task dead
+  [B] No Celery beat/scheduler
+  [B] No dead-letter queue handling
+
+================================================================================
+10. SHOWCASE MODULE AUDIT
+================================================================================
+
+LOCATION: showcase/ (32 source files)
+ROUTES: /demo, /demo?mode=quick, /demo?mode=examiner, /about
+INTEGRATION: 2-line wrappers in frontend/src/app/demo/page.tsx and about/page.tsx
+
+ISOLATION: CONFIRMED
+  - Zero backend API calls (showcase/shared/data/load-demo-data.ts imports JSON only)
+  - Not in middleware matcher (public routes)
+  - Separate UI kit (ShowcaseCard, ShowcaseButton vs ShadCN)
+  - Documented detach procedure in showcase/README.md
+
+DEMO MODES (showcase/config/demo.config.ts):
+  quick:    10 steps, ~2 min
+  examiner: 20 steps, ~5 min (default)
+
+DELETING showcase/ WILL NOT BREAK PRODUCTION:
+  YES — confirmed. Only /demo and /about routes break. All recruiter workflows
+  (dashboard, jobs, rankings, auth, APIs) remain functional after removing:
+    1. showcase/ folder
+    2. frontend/src/app/demo/ and about/
+    3. @showcase/* from tsconfig.json paths
+    4. showcase from tailwind.config.js content array
+
+CAVEAT: Docker frontend build currently DEPENDS on showcase/ being copied into image.
+
+================================================================================
+11. TESTING AUDIT
+================================================================================
+
+BACKEND TESTS (tests/):
+  tests/conftest.py              — declares pytest deps only, NO fixtures
+  tests/unit/test_engines.py     — 10+ engine unit tests
+  tests/unit/test_product_polish.py — file security, RBAC, signed URLs
+  tests/integration/test_api.py  — health, root, register/login/me only
+
+KNOWN TEST BUG:
+  test_engines.py line 21 calls compute_final_score() but does NOT import it
+  from ai.engines.scoring — test will fail with NameError.
+
+FRONTEND TESTS: NONE
+  - No test script in frontend/package.json
+  - No Jest/Vitest/Playwright config
+
+SHOWCASE TESTS: NONE
+
+CI/CD: NONE — no .github/workflows
+
+COVERAGE ESTIMATE:
+  Backend engines: ~40% of ai/engines modules have unit tests
+  Backend API:       ~5% (4 integration tests, auth only)
+  Backend services:  ~10% (via mocks in product_polish tests)
+  Frontend:          0%
+  E2E:               0%
+
+UNTESTED CRITICAL PATHS:
+  - Full ranking pipeline end-to-end
+  - Celery task execution
+  - LLM parsing with real providers
+  - Export (sync and async)
+  - Screening test flow
+  - Copilot chat
+  - IDOR / authorization boundaries
+  - File upload + encryption roundtrip
+
+================================================================================
+12. PRODUCTION READINESS SCORE
+================================================================================
+
+Dimension              Score   Notes
+---------------------  -----   ------------------------------------------
+Scalability            3/10    Per-candidate indexing during rank; no FAISS;
+                               heavy ML deps; no horizontal scaling config
+Reliability            4/10    Celery retries exist; no healthchecks in compose;
+                               create_all only schema management
+Maintainability        6/10    Clean module separation; dead code accumulates;
+                               no migrations; duplicate routes
+Observability          3/10    Optional Sentry; no metrics; basic health only
+Security               3/10    IDOR, weak RBAC, default secrets, stub virus scan
+Deployment readiness   2/10    Docker frontend broken; no CI; no seed in compose
+Error handling         5/10    Backend global catch; frontend mostly silent failures
+Docker readiness       3/10    Backend compose OK; frontend build fails without fix
+Monitoring             2/10    No prometheus, no log aggregation
+Testing                2/10    Thin unit tests; broken import; zero frontend/E2E
+
+OVERALL PRODUCTION READINESS:  33/100
+
+================================================================================
+13. MISSING FEATURES (truly absent or non-functional)
+================================================================================
+
+ 1. Real skill verification loop (screening → ranking score feedback)
+ 2. FAISS vector indexing (installed but never used)
+ 3. LangChain/LangGraph agent orchestration (installed but never used)
+ 4. Database migration system (Alembic configured but not set up)
+ 5. Per-route rate limiting enforcement
+ 6. Virus scanning on uploads (stub only)
+ 7. Async export via Celery (task exists, unwired)
+ 8. Frontend role-based access control
+ 9. Knowledge graph visualization (data fetched, rendered as tags)
+10. Real graph database or embedding-based knowledge graph
+11. CI/CD pipeline
+12. Frontend test suite
+13. E2E test suite
+14. Celery beat / scheduled tasks
+15. Comprehensive API integration tests
+16. /candidates list page (only per-ID detail exists)
+17. Real settings page (profile edit, password change, org settings)
+18. Prompt template loading from ai/prompts/ files
+
+================================================================================
+14. BROKEN FEATURES (code exists but does not work correctly)
+================================================================================
+
+ 1. Skill Verification in ranking — hardcoded 0.5, never uses screening results
+ 2. Job Settings override form — useState misuse prevents loading saved overrides
+ 3. Shadow Interview frontend flow — POST fires but no navigation or result display
+ 4. Docker frontend build — showcase/ not copied, build fails
+ 5. Unit test test_final_score_range — missing import, will NameError
+ 6. Register auth flow — bypasses NextAuth, inconsistent with middleware
+ 7. AnalyticsEvent tracking — table exists, almost nothing logged
+
+================================================================================
+15. DEAD CODE
+================================================================================
+
+FILE/MODULE                              REASON
+---------------------------------------  ------------------------------------
+ai/engines/hybrid_retrieval.py           Never imported; retrieval.py used instead
+ai/engines/cross_encoder.py              Never imported; logic duplicated in retrieval.py
+ai/agents/shadow_interview_graph.py      Never imported by any API route
+ai/prompts/jd_analyzer/v1.txt            Not loaded; inline prompts in llm_service.py
+ai/prompts/resume_parser/v1.txt          Not loaded
+ai/prompts/copilot/v1.txt                Not loaded
+ai/prompts/shadow_interview/v1.txt       Not loaded
+backend/workers/tasks.export_shortlist_task  Defined, registered in celery_app, never called
+backend/models.TaskProgress              Model exists, Redis used instead
+backend/config.rate_limit_rank_per_hour  Config value never referenced
+backend/services/export_task_service.py  Only called by dead Celery export task
+KnowledgeNode DB reads                   Written on upload, endpoint ignores DB rows
+frontend Radix UI packages               Installed but largely unused in components
+
+DUPLICATE CODE:
+  - Screening routes duplicated in rankings.py and screening.py
+  - Interview pack routes duplicated in rankings.py and interview_packs.py
+  - cn() utility duplicated in showcase/shared/utils.ts and frontend/src/lib/utils.ts
+  - Cross-encoder logic duplicated in retrieval.py and cross_encoder.py
+  - Showcase steps mirror production pages with static JSON (by design)
+
+================================================================================
+16. TECHNICAL DEBT
+================================================================================
+
+ 1. No Alembic migrations — schema managed by create_all + manual SQL files
+ 2. Dual auth model (NextAuth + localStorage) — fragile, hard to reason about
+ 3. Inconsistent authorization — RBAC on 4 routers, IDOR on others
+ 4. Marketing copy inflation — "AI modules" count varies (24 vs 32), oversells capability
+ 5. Heavy unused dependencies — langchain, langgraph, faiss-cpu add install size
+ 6. Duplicate API routes — screening and interview packs reachable via two paths
+ 7. No frontend error boundaries — failures appear as empty UI
+ 8. Analytics ≈ Dashboard duplication — same endpoint, overlapping UI
+ 9. Batch upload missing dedup/knowledge graph — inconsistent with single upload
+10. Prompt management — versioned prompt files exist but are not wired
+11. No CI/CD — regressions undetected (including broken unit test import)
+12. Docker compose incomplete — no seed, no healthchecks, broken frontend build
+
+================================================================================
+17. CLEANUP RECOMMENDATIONS
+================================================================================
+
+IMMEDIATE (remove dead weight):
+  - Remove langchain, langchain-core, langchain-community, langgraph from requirements.txt
+  - Remove faiss-cpu from requirements.txt (or actually implement FAISS in retrieval.py)
+  - Delete ai/engines/hybrid_retrieval.py and ai/engines/cross_encoder.py
+  - Delete ai/agents/shadow_interview_graph.py (or wire it to API)
+  - Remove unused Radix packages from frontend/package.json (or adopt them)
+  - Delete TaskProgress model or implement DB-backed progress
+  - Wire or delete export_shortlist_task
+
+SHORT-TERM (fix broken paths):
+  - Fix settings page: replace useState with useEffect for override hydration
+  - Fix shadow interview: navigate to /interview?job=&candidate= after POST
+  - Fix test_engines.py: add missing compute_final_score import
+  - Fix Dockerfile.frontend: COPY showcase/ into build context
+  - Unify auth: use NextAuth session token exclusively, remove localStorage bypass
+  - Connect screening verification_score to ranking pipeline
+  - Add job ownership checks on all candidate/ranking read endpoints
+
+MEDIUM-TERM (production hardening):
+  - Set up Alembic migrations
+  - Enforce require_permission on all routes
+  - Add per-route rate limits (@limiter.limit)
+  - Add CI with pytest + frontend lint + build check
+  - Add loading.tsx and error.tsx to app router
+  - Remove hardcoded login credentials
+  - Rotate default api_secret_key, fail startup if default in production
+  - Add DB healthcheck to /ready endpoint
+  - Wire ai/prompts/ files or delete them
+
+================================================================================
+18. HIGHEST PRIORITY FIXES (ranked by impact)
+================================================================================
+
+ P0 — SECURITY
+  1. Fix IDOR on candidate endpoints (add job ownership validation)
+  2. Enforce RBAC on all API routes, not just 4 routers
+  3. Remove default JWT secret; fail fast in production mode
+  4. Unify auth model; fix register bypass
+
+ P1 — BROKEN USER FLOWS
+  5. Fix job settings override form initialization bug
+  6. Fix shadow interview navigation/display on candidate page
+  7. Connect skill verification scores from screening to ranking pipeline
+  8. Fix Docker frontend build (copy showcase/)
+
+ P2 — RELIABILITY
+  9. Set up Alembic migrations
+ 10. Add CI pipeline with test suite
+ 11. Fix broken unit test import
+ 12. Add compose healthchecks + auto-seed
+
+ P3 — QUALITY
+ 13. Add error states to all frontend pages (not just JD Quality)
+ 14. Remove unused dependencies (langchain, faiss, etc.)
+ 15. Delete dead code modules
+ 16. Deduplicate screening/interview-pack API routes
+
+================================================================================
+19. COMPLETION ESTIMATES
+================================================================================
+
+ESTIMATED TRUE COMPLETION:  58%
+
+  Backend API surface:        75%  (endpoints exist, auth gaps remain)
+  AI/ML intelligence:         45%  (engines exist, many heuristic; key deps unused)
+  Frontend UX:                55%  (pages exist, error handling weak, bugs present)
+  Security:                   35%  (auth works, authorization does not)
+  Testing:                    15%  (few unit tests, no frontend/E2E/CI)
+  Infrastructure/Docker:      40%  (compose exists, frontend build broken)
+  Documentation accuracy:     50%  (README oversells; showcase README honest)
+
+RESUME/PORTFOLIO READINESS SCORE:  82/100
+  - Strong: architecture narrative, showcase/demo layer, breadth of features
+  - Showcase /demo and /about are polished and isolated
+  - 22 engine modules demonstrate systems thinking
+  - Weak: claiming LangChain/FAISS/LangGraph when unused hurts credibility
+
+STARTUP READINESS SCORE:  28/100
+  - Would not pass security review for multi-tenant SaaS
+  - No CI/CD, no migrations, IDOR vulnerabilities
+  - AI capabilities oversold relative to heuristic implementation
+  - Docker deployment broken for frontend
+  - No monitoring, no load testing, no data isolation guarantees
+
+================================================================================
+20. FINAL VERDICT
+================================================================================
+
+This is a well-structured PORTFOLIO / DEMO project that successfully demonstrates
+breadth across recruiting workflows: JD parsing, resume parsing, multi-signal
+ranking, screening, copilot, analytics, and a polished examiner walkthrough.
+
+It is NOT a production-ready AI recruiting platform.
+
+The gap between marketing language ("24 AI modules", LangChain, FAISS, LangGraph,
+multi-agent shadow interviews) and code reality (heuristic engines, unused
+dependencies, hardcoded verification scores, template Q&A) is the single biggest
+risk — both for production deployment and for technical credibility in interviews.
+
+WHAT WORKS FOR REAL USAGE (with backend + DB + Redis running):
+  - Create job → upload JD → upload resumes → run ranking → view shortlist
+  - Export CSV/PDF
+  - Screening test generation and taking
+  - Interview pack generation
+  - Copilot Q&A (with LLM keys configured)
+  - Ranking history comparison
+  - Examiner demo at /demo?mode=examiner (no backend needed)
+
+WHAT DOES NOT WORK OR IS MISLEADING:
+  - Skill verification affecting rankings
+  - Job settings override form loading saved data
+  - Shadow interview end-to-end UX
+  - Docker full-stack deployment (frontend build)
+  - Role-based access control
+  - Cross-tenant data isolation
+  - Claimed FAISS/LangChain/LangGraph usage
+
+RECOMMENDATION:
+  For portfolio/examiner presentation: ship as-is with honest README corrections.
+  For production: address P0–P2 fixes (~3–4 weeks focused work) before any
+  external users or paid deployment.
+
+================================================================================
+APPENDIX A: PROJECT INVENTORY
+================================================================================
+
+FOLDER STRUCTURE (source only, excluding node_modules/.next/__pycache__):
+  RESUME SHORTLIST/
+  ├── ai/
+  │   ├── agents/          (copilot_agent.py, shadow_interview_graph.py)
+  │   ├── engines/       (22 modules)
+  │   ├── pipeline/      (ranking_pipeline.py)
+  │   └── prompts/       (4 unused v1.txt files)
+  ├── backend/
+  │   ├── api/           (12 routers)
+  │   ├── services/      (13 services)
+  │   ├── workers/       (tasks.py)
+  │   ├── main.py, config.py, database.py, models.py, schemas.py
+  │   ├── celery_app.py, requirements.txt
+  ├── database/
+  │   ├── init.sql
+  │   └── migrations/002_product_polish.sql
+  ├── deployment/        (vercel.json, render.yaml, railway.toml)
+  ├── docker/            (docker-compose.yml, 2 Dockerfiles)
+  ├── docs/              (architecture, sample files)
+  ├── frontend/
+  │   └── src/app/       (24 pages), components/ (12), lib/, hooks/
+  ├── scripts/           (seed_demo.py)
+  ├── showcase/          (32 files — isolated demo)
+  ├── tests/             (4 files)
+  ├── .env.example
+  └── README.md
+
+MODULE COUNTS:
+  Backend Python files:     33
+  AI engine modules:        22
+  API routers:              12
+  Frontend pages:           24
+  Frontend components:      12
+  Showcase components:      ~20
+  Database tables:          17
+  Celery tasks:             5 (4 active, 1 dead)
+  Test files:               4
+
+================================================================================
+APPENDIX B: ORPHANED / UNUSED FILES
+================================================================================
+
+  ai/engines/hybrid_retrieval.py
+  ai/engines/cross_encoder.py
+  ai/agents/shadow_interview_graph.py
+  ai/prompts/jd_analyzer/v1.txt
+  ai/prompts/resume_parser/v1.txt
+  ai/prompts/copilot/v1.txt
+  ai/prompts/shadow_interview/v1.txt
+  backend/services/export_task_service.py (only reachable via dead task)
+  showcase/screenshots/.gitkeep
+  showcase/diagrams/.gitkeep
+
+================================================================================
+END OF AUDIT REPORT
+================================================================================

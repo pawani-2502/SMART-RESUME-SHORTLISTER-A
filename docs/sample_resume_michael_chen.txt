@@ -1,0 +1,42 @@
+MICHAEL CHEN
+Lead Backend Engineer
+michael.chen@email.com | +1 (555) 456-7890 | Seattle, WA
+
+SUMMARY
+Lead Backend Engineer with 10+ years building distributed systems at scale.
+Deep expertise in Python, microservices, cloud architecture, and team leadership.
+
+SKILLS
+Python, Java, Go, FastAPI, Spring, PostgreSQL, MongoDB, Redis, Kafka,
+AWS, GCP, Docker, Kubernetes, Terraform, System Design, Leadership
+
+EXPERIENCE
+
+Lead Backend Engineer | CloudScale Systems | Seattle, WA
+March 2019 - Present
+- Architected event-driven microservices platform processing 10M events/day
+- Led team of 8 engineers across 3 product areas
+- Reduced API latency by 40% through caching and query optimization
+- Technologies: Python, FastAPI, Kafka, PostgreSQL, Kubernetes, AWS
+
+Senior Software Engineer | BigTech Corp | Seattle, WA
+January 2015 - February 2019
+- Designed and implemented payment processing system handling $50M monthly
+- Mentored 6 engineers and established backend engineering standards
+- Technologies: Java, Spring, PostgreSQL, Redis, AWS
+
+Software Engineer | MidSize Tech | Portland, OR
+June 2012 - December 2014
+- Built internal tools and APIs for operations team
+- Technologies: Python, Django, MySQL
+
+EDUCATION
+Master of Science in Computer Science | Stanford University | 2012
+Bachelor of Science in Computer Engineering | MIT | 2010
+
+CERTIFICATIONS
+AWS Solutions Architect Professional | 2020
+Google Cloud Professional Architect | 2021
+
+AWARDS
+Engineering Excellence Award | CloudScale Systems | 2022

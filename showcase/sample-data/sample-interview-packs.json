@@ -1,0 +1,73 @@
+{
+  "packs": [
+    {
+      "id": "pack-001",
+      "candidate_name": "Alex Johnson",
+      "job_title": "Senior Full Stack Developer",
+      "tier": "strong",
+      "interview_objectives": [
+        "Validate system design at scale",
+        "Assess mentorship and leadership",
+        "Confirm full-stack depth"
+      ],
+      "technical_questions": [
+        { "question": "Walk through the 2M+ RPS API architecture you built at TechCorp." },
+        { "question": "How did you approach the microservices decomposition — what stayed monolithic?" },
+        { "question": "Design a real-time notification system for 500K concurrent users." }
+      ],
+      "behavioral_questions": [
+        { "question": "Tell me about mentoring junior engineers through a critical production incident." },
+        { "question": "Describe a time you pushed back on a product deadline for technical quality." }
+      ],
+      "gap_questions": [
+        { "question": "Your resume shows limited GraphQL — how would you ramp up if needed?" }
+      ],
+      "red_flags": []
+    },
+    {
+      "id": "pack-002",
+      "candidate_name": "Priya Sharma",
+      "job_title": "Senior Full Stack Developer",
+      "tier": "medium",
+      "interview_objectives": [
+        "Verify backend depth beyond frontend",
+        "Assess full-stack versatility",
+        "Evaluate startup adaptability"
+      ],
+      "technical_questions": [
+        { "question": "Explain your component library architecture and adoption strategy." },
+        { "question": "How would you build a Python API to support your React dashboard?" }
+      ],
+      "behavioral_questions": [
+        { "question": "Describe navigating ambiguity in a fast-moving startup." }
+      ],
+      "gap_questions": [
+        { "question": "Limited Docker/Kubernetes experience — what's your containerization plan?" },
+        { "question": "Python depth appears lighter — walk through a backend project you'd own." }
+      ],
+      "red_flags": ["Backend depth unverified", "No container orchestration evidence"]
+    },
+    {
+      "id": "pack-003",
+      "candidate_name": "Jordan Lee",
+      "job_title": "Senior Full Stack Developer",
+      "tier": "weak",
+      "interview_objectives": [
+        "Assess fundamental gaps",
+        "Determine training investment required"
+      ],
+      "technical_questions": [
+        { "question": "Explain the request lifecycle in a typical web application." },
+        { "question": "What is your experience with production databases?" }
+      ],
+      "behavioral_questions": [
+        { "question": "How do you approach learning new technologies under pressure?" }
+      ],
+      "gap_questions": [
+        { "question": "Resume shows 2 years experience vs 5 required — justify fit." },
+        { "question": "No AWS evidence — how would you deploy a production service?" }
+      ],
+      "red_flags": ["Below experience threshold", "Missing must-have skills: AWS, Docker", "Thin production evidence"]
+    }
+  ]
+}

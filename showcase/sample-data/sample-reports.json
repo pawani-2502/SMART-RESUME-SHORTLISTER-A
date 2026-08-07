@@ -1,0 +1,35 @@
+{
+  "evidence": [
+    { "claim": "Led FastAPI API at 2M+ daily requests", "section": "Experience", "snippet": "Led development of customer-facing API serving 2M+ daily requests using FastAPI and PostgreSQL", "confidence": 0.95 },
+    { "claim": "Microservices migration expertise", "section": "Experience", "snippet": "Architected microservices migration reducing deployment time by 60%", "confidence": 0.92 },
+    { "claim": "Team mentorship", "section": "Experience", "snippet": "Mentored team of 4 junior engineers, conducting weekly code reviews", "confidence": 0.88 },
+    { "claim": "AWS Solutions Architect certified", "section": "Certifications", "snippet": "AWS Solutions Architect", "confidence": 0.99 }
+  ],
+  "copilot_responses": [
+    {
+      "query": "Why is Candidate A ranked first?",
+      "response": "Alex Johnson ranks #1 with a 91% fit score. He demonstrates full-stack alignment (Python, React, FastAPI, AWS), strong career trajectory with promotions, and high interview readiness. Evidence shows 2M+ API scale and mentorship — directly matching senior role requirements."
+    },
+    {
+      "query": "Compare top candidates.",
+      "response": "Alex leads on full-stack breadth and leadership. Michael excels in backend/distributed systems but lacks frontend depth. Priya has strong React skills but weaker Python/Docker coverage. Alex is the strongest holistic match."
+    },
+    {
+      "query": "Show strongest React candidate.",
+      "response": "Priya Sharma has the highest React-specific depth with 5 years frontend-focused experience and a component library adopted by 3 teams. However, Alex Johnson also demonstrates strong React production experience alongside backend leadership."
+    },
+    {
+      "query": "Who has startup experience?",
+      "response": "Alex Johnson (StartupXYZ, 2018-2020) and Priya Sharma (FinFlow startup, 2020-Present) both have startup experience. Alex's includes CI/CD ownership and rapid iteration; Priya's includes performance optimization in a fintech context."
+    }
+  ],
+  "comparison": {
+    "candidate_a": "Alex Johnson",
+    "candidate_b": "Priya Sharma",
+    "skills": { "a": 0.92, "b": 0.68 },
+    "experience": { "a": 0.88, "b": 0.72 },
+    "trajectory": { "a": 0.88, "b": 0.72 },
+    "readiness": { "a": 0.89, "b": 0.70 },
+    "recommendation": "Alex is the stronger full-stack senior fit; Priya is better suited for frontend-heavy roles."
+  }
+}

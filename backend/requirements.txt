@@ -1,0 +1,54 @@
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+email-validator>=2.0.0
+requests>=2.31.0
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+psycopg2-binary==2.9.10
+alembic==1.14.0
+pydantic==2.10.3
+pydantic-settings==2.6.1
+redis==5.2.1
+celery==5.4.0
+httpx==0.28.1
+aiofiles==24.1.0
+
+# Document parsing
+pypdf==5.1.0
+python-docx==1.1.2
+pdfplumber==0.11.4
+
+# AI / ML
+langchain==0.3.13
+langchain-core==0.3.28
+langchain-community==0.3.13
+langgraph==0.2.60
+sentence-transformers==3.3.1
+faiss-cpu==1.9.0.post1
+numpy==1.26.4
+scikit-learn==1.6.0
+rank-bm25==0.2.2
+
+# Export
+openpyxl==3.1.5
+reportlab==4.2.5
+pandas==2.2.3
+
+# Utils
+python-dotenv==1.0.1
+tenacity==9.0.0
+structlog==24.4.0
+slowapi==0.1.9
+cryptography==44.0.0
+sse-starlette==2.2.1
+google-auth==2.37.0
+sentry-sdk[fastapi]==2.19.2
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+httpx==0.28.1

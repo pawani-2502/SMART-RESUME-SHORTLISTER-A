@@ -1,0 +1,33 @@
+PRIYA SHARMA
+Full Stack Developer
+priya.sharma@email.com | +1 (555) 987-6543 | Austin, TX
+
+SUMMARY
+Full Stack Developer with 4 years of experience in web development.
+Passionate about building user-friendly applications with modern technologies.
+
+SKILLS
+JavaScript, React, Node.js, Python, SQL, MongoDB, HTML, CSS, Git
+
+EXPERIENCE
+
+Full Stack Developer | Digital Solutions LLC | Austin, TX
+March 2022 - Present
+- Developed React components for enterprise dashboard application
+- Built Node.js REST APIs for mobile app backend
+- Collaborated with UX team on responsive design implementation
+- Technologies: React, Node.js, MongoDB, AWS
+
+Web Developer | CreativeWeb Studio | Austin, TX
+January 2020 - February 2022
+- Created responsive websites for 20+ clients
+- Implemented e-commerce features using JavaScript
+- Technologies: JavaScript, React, WordPress, PHP
+
+EDUCATION
+Bachelor of Technology in Information Technology
+University of Texas at Austin | 2019
+
+PROJECTS
+Task Management App - React/Node.js full-stack application with real-time updates
+Portfolio Website - Personal portfolio built with React and deployed on Vercel

@@ -1,0 +1,36 @@
+{
+  "total_jobs": 12,
+  "total_candidates": 847,
+  "total_rankings": 623,
+  "avg_score": 0.72,
+  "hiring_funnel": {
+    "uploaded": 847,
+    "parsed": 831,
+    "ranked": 623,
+    "shortlisted": 124,
+    "interviewed": 48,
+    "offered": 12
+  },
+  "skill_distribution": [
+    { "skill": "Python", "count": 412 },
+    { "skill": "React", "count": 389 },
+    { "skill": "AWS", "count": 356 },
+    { "skill": "TypeScript", "count": 298 },
+    { "skill": "PostgreSQL", "count": 287 },
+    { "skill": "Docker", "count": 245 },
+    { "skill": "FastAPI", "count": 178 },
+    { "skill": "Kubernetes", "count": 156 }
+  ],
+  "score_distribution": [
+    { "range": "90-100%", "count": 42 },
+    { "range": "80-89%", "count": 98 },
+    { "range": "70-79%", "count": 186 },
+    { "range": "60-69%", "count": 167 },
+    { "range": "Below 60%", "count": 130 }
+  ],
+  "candidate_quality": {
+    "high_confidence": 0.34,
+    "medium_confidence": 0.48,
+    "needs_review": 0.18
+  }
+}
