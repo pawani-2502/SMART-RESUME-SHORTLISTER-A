@@ -1,4 +1,6 @@
 import pytest
+from ai.engines.scoring import compute_final_score
+from ai.engines.scoring import compute_final_score
 from ai.engines.confidence import compute_confidence, assess_human_review
 from ai.engines.skill_graph import build_skill_graph, compute_skill_coverage
 from ai.engines.skill_decay import compute_skill_freshness, decay_factor
@@ -77,7 +79,7 @@ class TestCredibility:
     def test_many_skills_few_years(self):
         resume = {
             "skills": [{"name": f"skill{i}"} for i in range(35)],
-            "experience": [{"title": "Dev", "start_date": "2023-01", "end_date": "present"}],
+            "experience": [{"title": "Dev", "start_date": "2024-01", "end_date": "present"}],
         }
         result = detect_credibility_issues(resume)
         assert result["credibility_score"] < 1.0

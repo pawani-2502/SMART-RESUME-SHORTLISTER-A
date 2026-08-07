@@ -61,14 +61,18 @@ export default function InterviewPackPage({ params }: { params: Promise<{ id: st
 
   const copyAll = () => {
     if (!pack) return;
-    const sections = [
-      ["Technical", pack.technical_questions],
-      ["Behavioral", pack.behavioral_questions],
-      ["Gap-Focused", pack.gap_questions],
-      ["Follow-Up", pack.follow_up_questions],
+    const toQuestions = (qs: Array<{ question?: string } | string> | string | undefined) => {
+      if (!qs) return [];
+      return typeof qs === "string" ? [qs] : qs;
+    };
+    const sections: Array<[string, Array<{ question?: string } | string>]> = [
+      ["Technical", toQuestions(pack.technical_questions)],
+      ["Behavioral", toQuestions(pack.behavioral_questions)],
+      ["Gap-Focused", toQuestions(pack.gap_questions)],
+      ["Follow-Up", toQuestions(pack.follow_up_questions)],
     ];
     const text = sections.map(([title, qs]) =>
-      `${title}:\n${(qs ?? []).map((q, i) => `${i + 1}. ${typeof q === "object" ? q.question : q}`).join("\n")}`
+      `${title}:\n${qs.map((q, i) => `${i + 1}. ${typeof q === "object" ? q.question : q}`).join("\n")}`
     ).join("\n\n");
     navigator.clipboard.writeText(text);
   };
